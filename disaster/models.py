@@ -1,7 +1,3 @@
-
-
-# Create your models here.
-
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -20,9 +16,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(_('phone'),max_length=30,unique=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
-    is_staff = models.BooleanField(_('staff status'),default=False)
+    is_staff = models.BooleanField(_('staff status'),default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-
+    last_name  = models.CharField(_('last name'),max_length=30,blank=True)
     objects = UserManager()
 
     USERNAME_FIELD = 'phone'
@@ -57,9 +53,48 @@ class district(models.Model):
     state = models.ForeignKey(state, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
 
+volunteer_category = (
+    ('dcr', 'Doctor'),
+    ('hsv', 'Health Services'),
+    ('elw', 'Electrical Works'),
+    ('mew', 'Mechanical Work'),
+    ('cvw', 'Civil Work'),
+    ('plw', 'Plumbing work'),
+    ('vls', 'Vehicle Support'),
+    ('ckg', 'Cooking'),
+    ('rlo', 'Relief operation'),
+    ('cln', 'Cleaning'),
+    ('bot', 'Boat Service'),
+    ('rck', 'Rock Climbing'),
+    ('oth', 'Other')
+)
+
+gender =(
+    (0,'Male'),
+    (1,'Female'),
+    (2,'Others')
+)
+
+class Volunteer(models.Model):
+        name = models.CharField(max_length=100, verbose_name="Name")
+        gender = models.IntegerField(choices = gender,verbose_name='Gender',null=True,blank=True)
+        phone = models.CharField(max_length=14, verbose_name="Phone‍")
+        district = models.CharField(max_length = 15,verbose_name="District")
+        address = models.TextField(verbose_name="Address")
+        area = models.CharField(max_length = 15,choices = volunteer_category,verbose_name = "Area of volunteering")
+
+        joined = models.DateTimeField(auto_now_add=True)
+
+
+        def __str__(self):
+            return self.name
+
+
     
-
-
+class Help(models.Model):
+    name = models.CharField(max_length=200,blank=False,null=False)
+    photo = models.ImageField(upload_to='help_photos/',blank=False,null=False)
+    date = models.DateField(auto_now_add=True)
 
 class Disasters(models.Model):
     name = models.CharField(max_length=30,blank=False,null=False)
