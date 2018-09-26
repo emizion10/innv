@@ -90,7 +90,7 @@ class Volunteer(models.Model):
             return self.name
 
 
-    
+
 class Help(models.Model):
     name = models.CharField(max_length=200,blank=False,null=False)
     photo = models.ImageField(upload_to='help_photos/',blank=False,null=False)
@@ -101,10 +101,13 @@ class Disasters(models.Model):
     State = models.ForeignKey(state, on_delete=models.SET_NULL, null=True)
     District = models.ForeignKey(district, on_delete=models.SET_NULL, null=True)
 
- 
 
 
+class DisasterDetails(models.Model):
+    name = models.CharField(blank=True, max_length=100)
+    description = models.TextField(blank=True)
+    zonemap = models.ImageField(upload_to="zonemap/")
+    dos = models.TextField(blank=True)
 
-
-
-
+    def __str__(self):
+        return self.name
